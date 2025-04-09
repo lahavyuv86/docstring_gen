@@ -1,0 +1,13 @@
+# IDE / Editor
+.vscode
+.idea
+
+# Environments
+.venv
+.vault
+env/
+venv/
+ENV/
+
+# pyenv
+.python-version
