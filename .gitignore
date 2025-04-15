@@ -11,3 +11,6 @@ ENV/
 
 # pyenv
 .python-version
+
+# ignore all pycache folder across the repo
+**/__pycache__/
