@@ -8,15 +8,15 @@ def main():
     """Main entry point for the docstring generation tool.
 
     This script scans Python files or directories to identify missing docstrings,
-    generates compliant docstrings using Ollama, and inserts them into the
-    corresponding locations in the source code.
+    generates compliant docstrings using Ollama, and either prints them to the console
+    or inserts them into the corresponding locations in the source code.
 
     Steps:
         1. Parse command-line arguments to specify the target file/directory and Ruff config.
         2. Scan the target file/directory for functions, classes, or modules missing docstrings.
         3. Generate compliant docstrings using the Ollama model.
         4. Collect generated docstrings into a map to track their locations.
-        5. Perform batch insertion of the docstrings into the source code.
+        5. Print or perform batch insertion of the docstrings based on user input.
 
     Raises:
         Exception: If any step fails due to file I/O or execution issues.
@@ -26,7 +26,13 @@ def main():
     parser.add_argument("path", type=str, help="Path to file or directory to scan.")
     parser.add_argument("config_path", type=str, help="Path to pyproject.toml for Ruff config.")
     parser.add_argument("--model", type=str, default="llama3", help="Ollama model to use.")
+    parser.add_argument("--insert", action="store_true", help="Insert docstrings into files.")
+    parser.add_argument("--print", action="store_true", help="Print docstrings to the console.")
     args = parser.parse_args()
+
+    if not args.insert and not args.print:
+        print("⚠️  Please specify either --insert or --print.")
+        return
 
     # Step 2: Load Ruff configuration
     config = load_ruff_config(args.config_path)
@@ -49,15 +55,18 @@ def main():
         if not docstring.strip():
             print("⚠️  Empty docstring returned. Skipping...")
         else:
-            print(f"📄 Suggested docstring:\n{docstring}")
-            # Add the generated docstring to the map for later insertion
+            if args.print:
+                print(f"\n📄 Suggested docstring for {filepath}:{start_lineno}:\n{docstring}")
+            # Add the generated docstring to the map for later insertion if needed
             docstring_map.append({"filepath": filepath, "docstring": docstring, "start_lineno": start_lineno})
 
-    # Step 5: Perform batch insertion of docstrings
-    print("\n🛠 Inserting generated docstrings into files...")
-    batch_insert_docstrings(docstring_map)
-
-    print("\n✅ All docstrings have been generated and inserted successfully.")
+    # Step 5: Perform batch insertion of docstrings if requested
+    if args.insert:
+        print("\n🛠 Inserting generated docstrings into files...")
+        batch_insert_docstrings(docstring_map)
+        print("\n✅ All docstrings have been generated and inserted successfully.")
+    elif args.print:
+        print("\n✅ All docstrings have been generated and printed successfully.")
 
 
 if __name__ == "__main__":

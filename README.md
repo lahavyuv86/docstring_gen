@@ -28,6 +28,15 @@ pip install -r requirements.txt
 ```bash
 python main.py <path/to/file_or_dir> <path/to/pyproject.toml> --model <model name>
 ```
+#### To print the generated docstrings to console add this flag:
+```bash
+--print
+```
+
+#### To insert the generated docstrings to the given file add this flag:
+```bash
+--insert
+```
 
 ## License
 

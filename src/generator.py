@@ -6,10 +6,11 @@ def generate_docstring_with_ollama(code_snippet: str, config: dict, model: str) 
     prompt = (
         "You're a Python docstring generator AI. Generate a clean, complete docstring "
         "complying with PEP257 and all Ruff linter rules (D100-D107). The docstring should include:\n"
-        "1. A short description.\n"
+        "1. A short description, should be in imperative mood (e.g., 'Return' instead of 'Returns').\n"
         "2. 'Args:' section (only if the function has parameters) with parameter names, types, and descriptions.\n"
         "3. 'Return:' section (only if the function has a return value) with the return type and description.\n\n"
-        "Do not include empty 'Args:' or 'Return:' sections in the docstring.\n\n"
+        "Have spaces between each section in the docstring.\n\n"
+        "Do not include 'Args:' or 'Return:' sections in the docstring when they are 'Args: None' or 'Return: None'.\n\n"
         "Comply with these Ruff settings:\n"
         f"{json.dumps(config, indent=2)}\n\n"
         "Code:\n"
