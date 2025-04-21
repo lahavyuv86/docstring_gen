@@ -1,0 +1,12 @@
+[project]
+name = "docstring_gen"
+dynamic = ["version"]
+
+[tool.mypy]
+disable_error_code = [
+    "arg-type",
+    "union-attr",
+    "import-untyped",
+    "var-annotated",
+    "attr-defined"
+]

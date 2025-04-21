@@ -10,7 +10,9 @@ def count_lines_in_docstring(docstring: str) -> int:
     Returns:
         int: Number of lines in the docstring, including triple quotes.
     """
-    return docstring.strip().count("\n") + 2  # Add 2 for the opening and closing triple quotes
+    return (
+        docstring.strip().count("\n") + 2
+    )  # Add 2 for the opening and closing triple quotes
 
 
 def sanitize_docstring(docstring: str) -> str:
@@ -51,7 +53,7 @@ def find_insertion_point(node: ast.AST, lines: list) -> int:
     Returns:
         int: The line number where the docstring should be inserted.
     """
-    current_line = node.lineno - 1
+    current_line = node.lineno - 1  # noqa: attr-defined
 
     # Locate the colon marking the end of the signature
     while ":\n" not in lines[current_line]:
@@ -110,13 +112,19 @@ def batch_insert_docstrings(docstring_map: list):
         for entry in entries:
             docstring = sanitize_docstring(entry["docstring"])
             node = next(
-                (n for n in ast.walk(tree) if hasattr(n, "lineno") and n.lineno == entry["start_lineno"]),
-                None
+                (
+                    n
+                    for n in ast.walk(tree)
+                    if hasattr(n, "lineno") and n.lineno == entry["start_lineno"]
+                ),
+                None,
             )
             if node:
                 insertion_point = find_insertion_point(node, lines)
                 indentation = calculate_indentation(node, lines)
-                formatted_docstring = f"{indentation}{docstring.replace(chr(10), chr(10) + indentation)}"
+                formatted_docstring = (
+                    f"{indentation}{docstring.replace(chr(10), chr(10) + indentation)}"
+                )
                 lines.insert(insertion_point, formatted_docstring + "\n")
 
         # Write updated content back to the file

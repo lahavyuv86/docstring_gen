@@ -14,3 +14,6 @@ ENV/
 
 # ignore all pycache folder across the repo
 **/__pycache__/
+
+# ignore all egg-info folder across the repo
+**/*.egg-info/
