@@ -63,9 +63,10 @@ def find_insertion_point(node: ast.AST, lines: list) -> int:
     # Skip empty lines, continuation lines, comments, and decorators
     while current_line < len(lines):
         stripped_line = lines[current_line].strip()
-        if stripped_line and not stripped_line.startswith(("#", "@", "\\")):
+        if stripped_line and not stripped_line.startswith(("#", "\\")):
             break
-        current_line += 1
+        if not stripped_line.startswith("@"):
+            current_line += 1
 
     return current_line
 
@@ -80,12 +81,8 @@ def calculate_indentation(node: ast.AST, lines: list) -> str:
     Returns:
         str: A string of spaces for proper indentation.
     """
-    if "def" in lines[node.lineno + 1]:
-        base_line = lines[node.lineno + 1]
-
-    else:
-        base_line = lines[node.lineno - 1]
-
+    # Use the node's line for base indentation
+    base_line = lines[node.lineno - 1]
     base_indentation = " " * (len(base_line) - len(base_line.lstrip()))
     return base_indentation + " " * 4
 
