@@ -1,2 +1,4 @@
-ollama
-toml
+ollama>=0.4.8
+toml>=0.10.2
+pre-commit>=4.2.0
+types-toml>=0.10.8

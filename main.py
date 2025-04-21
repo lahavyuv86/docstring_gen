@@ -4,6 +4,7 @@ from src.generator import generate_docstring_with_ollama
 from src.ruff import load_ruff_config
 from src.inserter import batch_insert_docstrings
 
+
 def main():
     """Main entry point for the docstring generation tool.
 
@@ -24,10 +25,18 @@ def main():
     # Step 1: Parse command-line arguments
     parser = argparse.ArgumentParser(description="Generate docstrings using Ollama.")
     parser.add_argument("path", type=str, help="Path to file or directory to scan.")
-    parser.add_argument("config_path", type=str, help="Path to pyproject.toml for Ruff config.")
-    parser.add_argument("--model", type=str, default="llama3", help="Ollama model to use.")
-    parser.add_argument("--insert", action="store_true", help="Insert docstrings into files.")
-    parser.add_argument("--print", action="store_true", help="Print docstrings to the console.")
+    parser.add_argument(
+        "config_path", type=str, help="Path to pyproject.toml for Ruff config."
+    )
+    parser.add_argument(
+        "--model", type=str, default="llama3", help="Ollama model to use."
+    )
+    parser.add_argument(
+        "--insert", action="store_true", help="Insert docstrings into files."
+    )
+    parser.add_argument(
+        "--print", action="store_true", help="Print docstrings to the console."
+    )
     args = parser.parse_args()
 
     if not args.insert and not args.print:
@@ -49,16 +58,26 @@ def main():
         snippet = target["snippet"]
         start_lineno = target["start_lineno"]
 
-        print(f"\n✨ Generating docstring for {target['type']} in {filepath}:{start_lineno}...")
+        print(
+            f"\n✨ Generating docstring for {target['type']} in {filepath}:{start_lineno}..."
+        )
         docstring = generate_docstring_with_ollama(snippet, config, args.model)
 
         if not docstring.strip():
             print("⚠️  Empty docstring returned. Skipping...")
         else:
             if args.print:
-                print(f"\n📄 Suggested docstring for {filepath}:{start_lineno}:\n{docstring}")
+                print(
+                    f"\n📄 Suggested docstring for {filepath}:{start_lineno}:\n{docstring}"
+                )
             # Add the generated docstring to the map for later insertion if needed
-            docstring_map.append({"filepath": filepath, "docstring": docstring, "start_lineno": start_lineno})
+            docstring_map.append(
+                {
+                    "filepath": filepath,
+                    "docstring": docstring,
+                    "start_lineno": start_lineno,
+                }
+            )
 
     # Step 5: Perform batch insertion of docstrings if requested
     if args.insert:

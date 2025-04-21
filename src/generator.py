@@ -2,6 +2,7 @@ import subprocess
 import json
 import re
 
+
 def generate_docstring_with_ollama(code_snippet: str, config: dict, model: str) -> str:
     prompt = (
         "You're a Python docstring generator AI. Generate a clean, complete docstring "
@@ -48,7 +49,9 @@ def _clean_empty_sections(docstring: str) -> str:
         if line.strip() == "Args:" or line.strip() == "Return:":
             skip_section = True
             continue
-        if skip_section and not line.strip():  # Skip empty lines after an empty section header
+        if (
+            skip_section and not line.strip()
+        ):  # Skip empty lines after an empty section header
             skip_section = False
             continue
 

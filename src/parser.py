@@ -1,6 +1,6 @@
 import ast
 import os
-from typing import List, Tuple
+from typing import List
 
 
 def find_targets_for_docstrings(path: str, is_single_file: bool):
@@ -23,10 +23,17 @@ def find_targets_for_docstrings(path: str, is_single_file: bool):
 
                 # Get line numbers for the node
                 start_line = node.lineno
-                end_line = getattr(node, 'end_lineno', None)  # Python 3.9+
+                end_line = getattr(node, "end_lineno", None)  # Python 3.9+
                 snippet = ast.get_source_segment(code, node)
-                results.append({"filepath": filepath, "snippet": snippet, "type": type(node).__name__,
-                                "start_lineno": start_line, "end_lineno": end_line})
+                results.append(
+                    {
+                        "filepath": filepath,
+                        "snippet": snippet,
+                        "type": type(node).__name__,
+                        "start_lineno": start_line,
+                        "end_lineno": end_line,
+                    }
+                )
 
     return results
 
