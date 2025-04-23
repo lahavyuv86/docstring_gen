@@ -10,9 +10,7 @@ def count_lines_in_docstring(docstring: str) -> int:
     Returns:
         int: Number of lines in the docstring, including triple quotes.
     """
-    return (
-        docstring.strip().count("\n") + 2
-    )  # Add 2 for the opening and closing triple quotes
+    return docstring.strip().count("\n") + 2  # Add 2 for the opening and closing triple quotes
 
 
 def sanitize_docstring(docstring: str) -> str:
@@ -90,7 +88,7 @@ def calculate_indentation(node: ast.AST, lines: list) -> str:
 
 
 def batch_insert_docstrings(docstring_map: list):
-    """Batch inserts docstrings into their respective files.
+    """Batch inserts docstrings into their respective files from bottom to top.
 
     Args:
         docstring_map (list): A list of dictionaries containing docstring metadata.
@@ -108,6 +106,9 @@ def batch_insert_docstrings(docstring_map: list):
 
         # Parse the file
         tree = ast.parse("".join(lines))
+
+        # Sort entries by line number in descending order (bottom to top insertion)
+        entries = sorted(entries, key=lambda x: x["start_lineno"], reverse=True)
 
         for entry in entries:
             docstring = sanitize_docstring(entry["docstring"])
