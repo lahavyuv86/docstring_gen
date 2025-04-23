@@ -1,8 +1,11 @@
 import argparse
+import subprocess
+
 from src.parser import find_targets_for_docstrings
 from src.generator import generate_docstring_with_ollama
 from src.ruff import load_ruff_config
 from src.inserter import batch_insert_docstrings
+from utils import verify_no_code_removals
 
 
 def main():
@@ -83,7 +86,9 @@ def main():
     if args.insert:
         print("\n🛠 Inserting generated docstrings into files...")
         batch_insert_docstrings(docstring_map)
-        print("\n✅ All docstrings have been generated and inserted successfully.")
+        subprocess.run(["pre-commit", "run", "--files", args.path], check=False)  # Run pre-commit to fix indentation
+        subprocess.run(["ruff", "format", args.path], check=False)  # Fix formatting
+        verify_no_code_removals(args.path)  # Run Git diff verification
     elif args.print:
         print("\n✅ All docstrings have been generated and printed successfully.")
 
