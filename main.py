@@ -5,7 +5,7 @@ from src.parser import find_targets_for_docstrings
 from src.generator import generate_docstring_with_ollama
 from src.ruff import load_ruff_config
 from src.inserter import batch_insert_docstrings
-from utils import verify_no_code_removals
+from src.utils import verify_no_code_removals
 
 
 def main():

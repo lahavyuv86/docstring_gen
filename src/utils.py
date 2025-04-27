@@ -11,7 +11,7 @@ def verify_no_code_removals(file_path):
     diff_output = result.stdout.decode("utf-8")
 
     # Check if any lines were removed
-    removed_lines = [line for line in diff_output.split("\n") if line.startswith("-")]
+    removed_lines = [line for line in diff_output.split("\n") if line.startswith("-") and not line.endswith(".py")]
 
     if removed_lines:
         print("\n⚠️ WARNING: Some function bodies or code may have been removed!")
